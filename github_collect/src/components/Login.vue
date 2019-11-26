@@ -8,7 +8,12 @@
     <form @submit.prevent="loginSubmit">
       <input type="text" placeholder="Github username" v-model="name">
       <input type="password" placeholder="Password" v-model="password">
-      <button type="submit">Login</button>
+
+
+      <router-link :to="{name: 'Home'}">
+        <button id="submitButton" @click="initOcto();">Let's go!</button>
+      </router-link>
+
     </form>
   </div>
 </template>
@@ -68,7 +73,7 @@
   export default {
     data() {
       return {
-        email: '',
+        username: '',
         password: ''
       }
     },
@@ -85,9 +90,12 @@
       ]),
       loginSubmit() {
         this.doLogin({
-          email: this.email,
+          username: this.username,
           password: this.password
         })
+      },
+      initOcto() {
+          alert('showmore');
       }
     }
   }

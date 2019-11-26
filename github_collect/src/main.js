@@ -1,16 +1,39 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
+import router from './router'
 
-Vue.config.productionTip = false
+//Vue.config.productionTip = false
+//const GitHub = require('octocat');
 
 
-var octokit = new require("@octokit/rest")({
-	auth: process.env.VUE_APP_PERSONAL_AUTH,
-})
+
+
+/*new Vue({
+  store,
+  render: h => h(App)
+}).$mount('#app')*/
+//new Vue({
+//  el: '#app',
+//  store,
+//  router,
+//  render: h => h(App)
+//}).$mount('#app')
+
+//new Vue({
+//  el: '#app',
+//  store,
+//  router,
+//  template: '<App/>',
+//  components: { App }
+//})
 
 
 new Vue({
+  el: '#app',
   store,
+  router,
+  template: '<App/>',
+  components: { App },
   render: h => h(App)
-}).$mount('#app')
+})//.$mount('#app')

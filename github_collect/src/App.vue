@@ -1,19 +1,19 @@
 <template>
   <div id="app">
+      <img src="/loading.gif">
     <Login msg="Hello there"/>
+    <router-view></router-view>
+
   </div>
 </template>
 
-<script>
-import Login from './components/Login.vue'
 
+<script>
 export default {
-  name: 'app',
-  components: {
-    Login
-  }
+  name: 'app'
 }
 </script>
+
 
 <style>
 #app {
