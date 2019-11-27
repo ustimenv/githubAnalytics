@@ -6,13 +6,14 @@
     <p v-if="loginError">{{ loginError }}</p>
     <p v-if="loginSuccessful">Login Successful</p>
     <form @submit.prevent="loginSubmit">
-      <input type="text" placeholder="Github username" v-model="name">
+      <input type="text" placeholder="Github username" v-model="username">
       <input type="password" placeholder="Password" v-model="password">
 
 
       <router-link :to="{name: 'Home'}">
         <button id="submitButton" @click="initOcto();">Let's go!</button>
       </router-link>
+
 
     </form>
   </div>
@@ -91,12 +92,14 @@
       loginSubmit() {
         this.doLogin({
           username: this.username,
-          password: this.password
+          password: this.password,
         })
       },
       initOcto() {
-          alert('showmore');
-      }
+        }
+
+
     }
-  }
+   }
+
 </script>

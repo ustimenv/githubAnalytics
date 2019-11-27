@@ -8,6 +8,10 @@
 </template>
 
 
+
+Const Plotly = require("plotly");
+const $plotly = new Plotly();
+
 <script>
 export default {
   name: 'app'

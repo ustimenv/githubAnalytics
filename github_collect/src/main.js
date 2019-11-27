@@ -28,6 +28,8 @@ import router from './router'
 //  components: { App }
 //})
 
+Vue.prototype.$octo;
+
 
 new Vue({
   el: '#app',
