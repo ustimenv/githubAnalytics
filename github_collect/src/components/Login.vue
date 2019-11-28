@@ -5,17 +5,19 @@
     </div>
     <p v-if="loginError">{{ loginError }}</p>
     <p v-if="loginSuccessful">Login Successful</p>
+
     <form @submit.prevent="loginSubmit">
-      <input type="text" placeholder="Github username" v-model="username">
+      <input type="text" placeholder="Github username" v-model="user">
       <input type="password" placeholder="Password" v-model="password">
 
 
-      <router-link :to="{name: 'Home'}">
-        <button id="submitButton" @click="initOcto();">Let's go!</button>
+     <router-link :to="{name: 'Home', params : {username: username}}">
+        <button id="submitButton">Let's go!</button>
       </router-link>
 
 
     </form>
+
   </div>
 </template>
 
@@ -70,7 +72,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-
+  const OctoRest = require("@octokit/rest");
   export default {
     data() {
       return {
@@ -83,11 +85,19 @@
         'loggingIn',
         'loginError',
         'loginSuccessful'
-      ])
+      ]),
+      getOctokit() {
+          return  OctoRest({
+              auth: {
+                username : this.username,
+                password : this.password
+              }
+          });
+      }
     },
     methods: {
       ...mapActions([
-        'doLogin'
+        'doLogin',
       ]),
       loginSubmit() {
         this.doLogin({
@@ -95,11 +105,24 @@
           password: this.password,
         })
       },
-      initOcto() {
-        }
+      initOctokit() {
+        this.octokit = new OctoRest({
+            auth: {
+                username : this.username,
+                password : this.password
+            }
+        });
 
+      },
+      defaultOctokit() {
+        this.octokit = new OctoRest();
+      }
 
+    },
+    beforeMount() {
+        this.username = 'ustimenv';
+//        this.defaultOctokit();
     }
-   }
+  }
 
 </script>
