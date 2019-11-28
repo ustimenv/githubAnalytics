@@ -11,10 +11,12 @@
           <button id="submitButton" @click="search();">Search!</button>
         </form>-->
 
+        <input type="text" v-model='username' placeholder="Who are we searching">
+
         <button id="submitButton" @click="search();">Search!</button>
 
         <h2 id='loggedIn'>
-          Logged in as: {{username}}
+          Logged in as: {{usernameLoggedIn}}
         </h2>
         <div id='divovivo'>
         </div>
@@ -104,42 +106,41 @@ const Plotly = require("plotly.js-dist");
 
   export default {
     beforeMount() {
-//      this.octo = new OctoRest();
       this.octo = new OctoRest({
           auth: process.env.VUE_APP_TOKEN});
     },
     data: function() {
       return {
+          username: '',
           result: null,
           complete: false,
           repoNames: [],
           result2: null,
           displayedRepoIndex: 0,
-          displayedRepoName: ""
       }
     },
     props: {
-        username: {
+        usernameLoggedIn: {
             type: String,
-            default: 'Yeeehaw',
+            default: 'ustimenv',
             },
-//        octo1: {
-//            type: Object,
-//            default: new OctoRest(),
-//            },
+        octo1: {
+            type: Object,
+            default: new OctoRest(),
+            },
     },
 
     methods: {
       search() {
         //top level user overview
-        this.octo.users.getByUsername({username:'ustimenv'})
+        this.octo.users.getByUsername({username:this.username})
         .then(resultA => {
           this.result = resultA.data
         })
 
         //Get repository names
         this.octo.repos.listForUser({
-          username: 'ustimenv',
+          username: this.username,
           type: 'owner'
         })
         .then(resultB => {
@@ -152,7 +153,7 @@ const Plotly = require("plotly.js-dist");
           for(var j=0; j<this.repoNames.length; j++)
           {
             requests.push(this.octo.repos.getContributorsStats({
-              owner: 'ustimenv',
+              owner: this.username,
               repo: this.repoNames[j]
             }))
           }
@@ -167,7 +168,7 @@ const Plotly = require("plotly.js-dist");
             {
               for(var m=0; m<resultC[k].data.length; m++)
               {
-                if(resultC[k].data[m].author.login == 'ustimenv')
+                if(resultC[k].data[m].author.login == this.username)
                 {
                   resultTmp.push(resultC[k].data[m])
                 }
@@ -193,13 +194,14 @@ const Plotly = require("plotly.js-dist");
           commits.push(repo.weeks[i].c)
 
         }
-        //eslint-disable-next-line
-//        console.log(repo)
+
         var A = {
             x: weeks,
             y: additions,
             name: 'Additions',
-            type: 'bar'
+            type: 'bar',
+            text: commits.map(String),
+            textposition: 'auto'
         }
         var D = {
             x: weeks,
@@ -207,17 +209,15 @@ const Plotly = require("plotly.js-dist");
             name: 'Deletions',
             type: 'bar'
         }
-        //eslint-disable-next-line
-        var C = {
-            x: weeks,
-            y: commits,
-            name: 'Commits',
-            type: 'bar'
-        }
-//        var data = [A, D, C]
+
         var data = [A, D]
-        var layout = {barmode: 'group'}
+        var layout = {barmode: 'group',
+                      title: this.repoNames[repoIndex]
+                     }
         Plotly.plot('divovivo', data, layout)
+                //eslint-disable-next-line
+        console.log(this.repoNames)
+
       },
 
     nextGraph() {
